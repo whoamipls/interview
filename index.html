@@ -11,6 +11,7 @@
 <body>
    <div id="vue_det">
       <el-input placeholder="Please input" v-model="currentName"></el-input>
+      <el-button type="primary" @click="initData()">Load Data</el-button>
       <el-table :data="currentPageData()" style="width: 100%" @row-click="rowClick">
          <el-table-column prop="userId" label="UserId" width="180">
          </el-table-column>
@@ -40,15 +41,18 @@
       var vm = new Vue({
          el: '#vue_det',
          created: function () {
-            for (var i = 1; i <= 40; i++) {
-               allData.push({
-                  userId: i,
-                  name: randomString(5),
-                  tel: Math.floor(Math.random() * 1000000)
-               });
-            }
          },
          methods: {
+            initData: function () {
+               if (allData.length > 0) return;
+               for (var i = 1; i <= 40; i++) {
+                  allData.push({
+                     userId: i,
+                     name: randomString(5),
+                     tel: Math.floor(Math.random() * 1000000)
+                  });
+               }
+            },
             dataCount: function () {
                return this.tableData.length;
             },
