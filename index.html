@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <meta charset="utf-8">
+   <title>UserInfo</title>
+   <script src="https://cdn.staticfile.org/vue/2.4.2/vue.min.js"></script>
+   <script src="//unpkg.com/vue/dist/vue.js"></script>
+   <script src="//unpkg.com/element-ui@2.9.1/lib/index.js"></script>
+   <link rel="stylesheet" href="https://unpkg.com/element-ui@2.9.1/lib/theme-chalk/index.css" type="text/css" />
+</head>
+<body>
+   <div id="vue_det">
+      <el-input placeholder="Please input" v-model="currentName"></el-input>
+      <el-table :data="currentPageData()" style="width: 100%" @row-click="rowClick">
+         <el-table-column prop="userId" label="UserId" width="180">
+         </el-table-column>
+         <el-table-column prop="name" label="UserName" width="180">
+         </el-table-column>
+         <el-table-column prop="tel" label="UserPhone">
+         </el-table-column>
+      </el-table>
+      <el-pagination layout="prev, pager, next" :page-size="pageSize" :total="dataCount()" :current-page="currentPage" @current-change="handleCurrentChange">
+      </el-pagination>
+   </div>
+   <script type="text/javascript">
+      // random string
+      function randomString(len) {
+         len = len || 32;
+         var $chars = 'abcdefghijklmnopqrstuvwxyz';
+         var maxPos = $chars.length;
+         var pwd = '';
+         for (i = 0; i < len; i++) {
+            pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+         }
+         return pwd;
+      }
+      // all data
+      var allData = [];
+      // vue
+      var vm = new Vue({
+         el: '#vue_det',
+         created: function () {
+            for (var i = 1; i <= 40; i++) {
+               allData.push({
+                  userId: i,
+                  name: randomString(5),
+                  tel: Math.floor(Math.random() * 1000000)
+               });
+            }
+         },
+         methods: {
+            dataCount: function () {
+               return this.tableData.length;
+            },
+            currentPageData: function () {
+               var page = this.currentPage - 1;
+               var f = this.pageSize * page;
+               var t = this.pageSize * (page + 1);
+               var data = this.tableData.slice(f, t);
+               return data;
+            },
+            handleCurrentChange: function (val) {
+               this.currentPage = val;
+            },
+            rowClick: function (row, column, event) {
+               this.currentName = row.name;
+            }
+         },
+         data: {
+            currentName: '',
+            pageSize: 4,
+            currentPage: 1,
+            tableData: allData
+         }
+      })
+   </script>
+</body>
+</html>
